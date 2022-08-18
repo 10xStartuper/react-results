@@ -1,24 +1,42 @@
 import React from 'react';
 import './style.css';
 import logo from './assets/logo.png';
-import database from './database/db.json';
+// import database from './database/db.json';
 import Result from './components/Result';
 
 const App = () => {
-  function searchID(id) {
-    const item = database.find((item) => item.id === id);
+  function searchID(id, table) {
+    const item = table.find((item) => item.id === id);
     setUser(item);
   }
   const [id, setId] = React.useState('');
   const [user, setUser] = React.useState(null);
+  const [spinner, setSpinner] = React.useState(false);
+  const [table, setTable] = React.useState([]);
+  React.useEffect(() => {
+    setSpinner(true);
+    fetch(
+      'https://raw.githubusercontent.com/MrAbdurakhimov/react-results/master/src/database/db.json'
+    )
+      .then((response) => {
+        setSpinner(false);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        return setTable(data);
+      });
+  }, []);
   return (
     <div>
-      {/* <div id="loader">
-        <p className="loading-message">
-          Iltimos kuting ma'lumotlar yuklanmoqda
-        </p>
-        <div className="spinner"></div>
-      </div> */}
+      {spinner && (
+        <div id="loader">
+          <p className="loading-message">
+            Iltimos kuting ma'lumotlar yuklanmoqda
+          </p>
+          <div className="spinner"></div>
+        </div>
+      )}
       <form className="app">
         <img src={logo} className="logo" alt="" />
         <br />
@@ -38,7 +56,7 @@ const App = () => {
           className="btn getResult"
           onClick={(e) => {
             e.preventDefault();
-            searchID(id);
+            searchID(id, table);
           }}
         >
           Natijani olish
