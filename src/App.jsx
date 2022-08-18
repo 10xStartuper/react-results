@@ -1,12 +1,12 @@
 import React from 'react';
 import './style.css';
 import logo from './assets/logo.png';
-// import database from './database/db.json';
 import Result from './components/Result';
 
 const App = () => {
   function searchID(id, table) {
     const item = table.find((item) => item.id === id);
+    console.log('item', item);
     setUser(item);
   }
   const [id, setId] = React.useState('');
@@ -80,6 +80,12 @@ const App = () => {
           ball3={user.ball3}
           result={user.result}
         />
+      )}
+
+      {user === undefined && (
+        <div className="result">
+          <h2>Siz kiritgan ID topilmadi</h2>
+        </div>
       )}
     </div>
   );
